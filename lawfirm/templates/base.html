@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Legal Practice Management{% endblock %}</title>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated %}
+        <nav>
+            <ul class="navbar">
+                <li><a href="{% url 'home' %}">Home</a></li>
+            
+                <!-- Dashboard -->
+                {% if user.role == 'lawyer' %}
+                    <li><a href="{% url 'lawyer_dashboard' %}">Dashboard</a></li>
+                {% elif user.role == 'secretary' %}
+                    <li><a href="{% url 'secretary_dashboard' %}">Dashboard</a></li>
+                {% elif user.role == 'attache' %}
+                    <li><a href="{% url 'attache_dashboard' %}">Dashboard</a></li>
+                {% elif user.role == 'legal_assistant' %}
+                    <li><a href="{% url 'legal_assistant_dashboard' %}">Dashboard</a></li>
+                {% endif %}
+
+                <!-- Case Management Dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Case Management</a>
+                    <div class="dropdown-content">
+                        {% if user.role == 'lawyer' %}
+                            <a href="{% url 'create_case' %}">Create Case</a>
+                            <a href="{% url 'view_cases' %}">View Cases</a>
+                        {% elif user.role == 'secretary' %}
+                            <a href="{% url 'secretary_view_cases' %}">View Cases</a>
+                        {% elif user.role == 'legal_assistant' %}       
+                        <a href="{% url 'legal_assistant_view_cases' %}">View Cases</a>
+                        {% elif user.role == 'attache' %}
+                            <a href="{% url 'attache_view_cases' %}">View Cases</a>
+                        {% endif %}
+                    </div>
+                </li>
+
+                <!-- Task Management Dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Task Management</a>
+                    <div class="dropdown-content">
+                        {% if user.role == 'lawyer' %}
+                            <a href="{% url 'create_task' %}">Create Task</a>
+                            <a href="{% url 'task_list' %}">View Tasks</a>
+                        {% elif user.role == 'secretary' %}
+                        <a href="{% url 'secretary_create_task' %}">Create Tasks</a>
+                        <a href="{% url 'secretary_task_list' %}">View Tasks</a>
+                        {% elif user.role == 'legal_assistant' %}
+                            <a href="{% url 'legal_assistant_create_task' %}">Create Task</a>
+                            <a href="{% url 'legal_assistant_task_list' %}">View Tasks</a>
+                        {% elif user.role == 'attache' %}
+                            <a href="{% url 'attache_task_list' %}">View Tasks</a>
+                        {% endif %}
+                    </div>
+                </li>
+
+                <!-- Calendar Management Dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Calendar Management</a>
+                    <div class="dropdown-content">
+                        {% if user.role == 'lawyer' %}
+                            <a class="dropdown-item" href="{% url 'calendar' %}">Calendar</a>
+                            <a class="dropdown-item" href="{% url 'date_detail' date_str='2025-03-31' %}">Daily View</a></li>
+                        {% elif user.role == 'secretary' %}
+                            <a href="{% url 'calendar' %}">View Calendar</a>
+                            <a href="{% url 'secretary_date_detail' date_str='2025-03-31' %}">Daily View</a>
+                        {% elif user.role == 'legal_assistant' %}
+                            <a href="{% url 'legal_assistant_calendar' %}">View Calendar</a>
+                            <a href="{% url 'legal_assistant_date_detail' date_str='2025-03-31' %}">Add Event</a>
+                        {% elif user.role == 'attache' %}
+                            <a href="{% url 'attache_calendar' %}">View Calendar</a>
+                            <a href="{% url 'attache_date_detail' date_str='2025-03-31' %}">Add Event</a>
+                        {% endif %}
+                    </div>
+                </li>
+
+                <!-- Logout -->
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; {% now "Y" %} Legal Practice Management System</p>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

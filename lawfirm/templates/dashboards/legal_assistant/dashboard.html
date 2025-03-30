@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Case Metrics -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>Case Overview</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card text-white bg-info mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Cases</h5>
+                                    <h2 class="card-text">{{ total_cases }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-warning mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Open Cases</h5>
+                                    <h2 class="card-text">{{ open_cases }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-secondary mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">In Progress</h5>
+                                    <h2 class="card-text">{{ in_progress_cases }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-success mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Closed Cases</h5>
+                                    <h2 class="card-text">{{ closed_cases }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Analytics -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>Task Management</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Task Status</h5>
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-success" style="width: {{ completed_tasks_percentage|default:0 }}%;">
+                                    Completed ({{ completed_tasks|default:0 }})
+                                </div>
+                                <div class="progress-bar bg-warning" style="width: {{ in_progress_tasks_percentage|default:0 }}%">
+                                    In Progress ({{ in_progress_tasks|default:0 }})
+                                </div>
+                                <div class="progress-bar bg-danger" style="width: {{ pending_tasks_percentage }}%">
+                                    Pending ({{ pending_tasks }})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Quick Stats</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total Tasks
+                                    <span class="badge bg-primary rounded-pill">{{ total_tasks_assigned }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    On Hold
+                                    <span class="badge bg-secondary rounded-pill">{{ on_hold_tasks }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Documents -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>Recent Documents</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for doc in recent_documents %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ doc.file.url }}" target="_blank">
+                                            <i class="fas fa-file me-2"></i>{{ doc.filename }}
+                                        </a>
+                                    </td>
+                                    <td>{{ doc.get_document_type_display }}</td>
+                                    <td>{{ doc.uploaded_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No recent documents</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <!-- Upcoming Events -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>Upcoming Events</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for event in upcoming_events %}
+                        <li class="list-group-item">
+                            <strong>{{ event.title }}</strong><br>
+                            <small>{{ event.start_time|date:"M d, h:i A" }}</small>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No upcoming events</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>Quick Actions</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'legal_assistant_create_task' %}" class="btn btn-primary">
+                            <i class="fas fa-tasks me-2"></i>Create Task
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Event Types -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Calendar Overview</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Meetings
+                            <span class="badge bg-primary rounded-pill">{{ meetings_calendar_events.count }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Court Appearances
+                            <span class="badge bg-danger rounded-pill">{{ court_appearance_calendar_events.count }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Deadlines
+                            <span class="badge bg-warning rounded-pill">{{ deadlines_calendar_events.count }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

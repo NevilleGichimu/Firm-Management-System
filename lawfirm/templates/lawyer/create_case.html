@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Create New Case</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="{{ form.case_number.id_for_label }}" class="form-label">Case Number</label>
+            {{ form.case_number }}
+            {% if form.case_number.errors %}
+                <div class="text-danger">{{ form.case_number.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.client_name.id_for_label }}" class="form-label">Client Name</label>
+            {{ form.client_name }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.case_type.id_for_label }}" class="form-label">Case Type</label>
+            {{ form.case_type }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+            {{ form.description }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.documents.id_for_label }}" class="form-label">Documents</label>
+            {{ form.documents }}
+            <div class="form-text">{{ form.documents.help_text }}</div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Create Case</button>
+        <a href="{% url 'view_cases' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

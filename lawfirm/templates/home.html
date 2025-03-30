@@ -1,0 +1,14 @@
+<h2>Welcome to the Law Firm Management System</h2>
+
+<!-- Login Form -->
+<form method="post">
+    {% csrf_token %}
+    <h3>Log In</h3>
+    {{ login_form.as_p }}
+    <button type="submit" name="login">Log In</button>
+</form>
+
+<hr>
+
+<!-- Signup Link -->
+<p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>.</p>

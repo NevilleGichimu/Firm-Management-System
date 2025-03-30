@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Update Case: {{ case.case_number }}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Case Number</label>
+                        {{ form.case_number }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Client Name</label>
+                        {{ form.client_name }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Case Type</label>
+                    {{ form.case_type }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    {{ form.description }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Additional Documents</label>
+                    {{ form.documents }}
+                    <small class="text-muted">{{ form.documents.help_text }}</small>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update Case
+                    </button>
+                    <a href="{% url 'view_case' case.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between">
+            <h2>Case: {{ case.case_number }} - {{ case.client_name }}</h2>
+            <div>
+                <a href="{% url 'update_case' case.id %}" class="btn btn-light btn-sm">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Case Details</h5>
+                    <p><strong>Type:</strong> {{ case.get_case_type_display }}</p>
+                    <p><strong>Status:</strong> 
+                        <span class="badge 
+                            {% if case.status == 'closed' %}bg-success
+                            {% elif case.status == 'in_progress' %}bg-warning
+                            {% else %}bg-primary{% endif %}">
+                            {{ case.get_status_display }}
+                        </span>
+                    </p>
+                    <p><strong>Created:</strong> {{ case.created_at|date:"M d, Y" }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Description</h5>
+                    <p>{{ case.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h4>Case Documents</h4>
+        </div>
+        <div class="card-body">
+            {% if documents %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Uploaded</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in documents %}
+                        <tr>
+                            <td>
+                                <a href="{{ doc.file.url }}" target="_blank">
+                                    <i class="fas fa-file me-2"></i>{{ doc.filename }}
+                                </a>
+                            </td>
+                            <td>{{ doc.uploaded_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{{ doc.file.url }}" download class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">No documents uploaded for this case.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

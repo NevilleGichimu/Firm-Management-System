@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Task List</h2>
+
+<!-- Tasks Assigned to the Secretary -->
+<h3>Tasks Assigned to Me</h3>
+<ul>
+    {% for task in tasks_assigned_to_secretary %}
+        <li>
+            <strong>{{ task.title }}</strong> - Assigned by: {{ task.assignor.username }}
+            <br>Status: {{ task.status }}
+        </li>
+    {% empty %}
+        <p>No tasks assigned to you.</p>
+    {% endfor %}
+</ul>
+
+<!-- Tasks Assigned by the Secretary -->
+<h3>Tasks I Assigned</h3>
+<ul>
+    {% for task in tasks_assigned_by_secretary %}
+        <li>
+            <strong>{{ task.title }}</strong> - Assigned to: {{ task.assignee.username }}
+            <br>Status: {{ task.status }}
+        </li>
+    {% empty %}
+        <p>No tasks assigned by you.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!-- lawyer/calendar.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Calendar</h2>
+
+<div id='calendar'></div>
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: JSON.parse('{{ events_json|escapejs }}'), // Safely parse JSON
+        dateClick: function(info) {
+            // Redirect to date detail view when a date is clicked
+            window.location.href = `/legal_assistant/calendar/${info.dateStr}`;
+        },
+        eventClick: function(info) {
+            // Show event details when an event is clicked
+            alert('Event: ' + info.event.title + '\n' +
+                  'Description: ' + info.event.extendedProps.description);
+        }
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}

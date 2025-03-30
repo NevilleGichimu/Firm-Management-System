@@ -1,0 +1,16 @@
+<h2>Sign Up</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ signup_form.as_p }}
+    
+    <label for="role">Choose Your Role:</label>
+    <select name="role" required>
+        <option value="lawyer">Lawyer</option>
+        <option value="secretary">Secretary</option>
+        <option value="attache">Attaché</option>
+        <option value="legal_assistant">Legal Assistant</option>
+    </select>
+
+    <button type="submit" name="signup">Sign Up</button>
+</form>

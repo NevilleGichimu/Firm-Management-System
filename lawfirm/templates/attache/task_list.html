@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Task List</h2>
+
+<!-- Tasks Assigned to the Attache-->
+<h3>Tasks Assigned to Me</h3>
+<ul>
+    {% for task in tasks_assigned_to_attache %}
+        <li>
+            <strong>{{ task.title }}</strong> - Assigned by: {{ task.assignor.username }}
+            <br>Status: {{ task.status }}
+        </li>
+    {% empty %}
+        <p>No tasks assigned to you.</p>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
